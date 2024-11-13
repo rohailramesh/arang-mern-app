@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
+import { connectDB } from "./lib/db.js";
 import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
 import adminRouter from "./routes/admin.route.js";
@@ -21,4 +22,5 @@ app.use("/api/stats", statRouter);
 
 app.listen(PORT, () => {
   console.log("Server is running on port123 " + PORT);
+  connectDB();
 });
