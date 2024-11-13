@@ -31,7 +31,7 @@ const albumSchema = new mongoose.Schema(
       type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Song" }],
     },
   },
-  { timestamps }
+  { timestamps: true }
 );
 
 export const Album = mongoose.model("Album", albumSchema);
