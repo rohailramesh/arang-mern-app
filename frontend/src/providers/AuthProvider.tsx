@@ -10,7 +10,7 @@ const updateApiToken = (token: string | null) => {
   if (token) {
     axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   } else {
-    axiosInstance.defaults.headers.common["Authorization"];
+    delete axiosInstance.defaults.headers.common["Authorization"];
   }
 };
 
