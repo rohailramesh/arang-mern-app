@@ -11,7 +11,7 @@ interface MusicStore {
   albumId: string | null;
   fetchAlbums: () => Promise<void>;
   fetchAlbumById: (id: string) => Promise<void>;
-}
+} // this is everything that is in the store and can be accessed globally
 
 export const useMusicStore = create<MusicStore>((set) => ({
   albums: [],
