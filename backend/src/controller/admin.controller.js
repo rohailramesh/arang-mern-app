@@ -116,5 +116,5 @@ export const deleteAlbum = async (req, res, next) => {
 };
 
 export const checkAdmin = (req, res, next) => {
-  res.status(200).json({ message: "You are an admin" });
+  res.status(200).json({ admin: true });
 };

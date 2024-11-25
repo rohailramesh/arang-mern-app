@@ -9,3 +9,4 @@ albumRouter.get("/", getAllAlbums);
 albumRouter.get("/:albumId", getAlbumById);
 
 export default albumRouter;
+//test

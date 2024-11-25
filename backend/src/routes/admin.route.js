@@ -18,3 +18,4 @@ adminRouter.post("/albums", createAlbum);
 adminRouter.delete("/albums/:id", deleteAlbum);
 
 export default adminRouter;
+//test
