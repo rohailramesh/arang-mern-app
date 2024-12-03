@@ -33,6 +33,7 @@ export const getStats = async (req, res, next) => {
       totalUsers,
       totalArtists: uniqueArtists[0]?.count || 0,
     });
+    console.log(totalSongs);
   } catch (error) {
     next(error);
   }

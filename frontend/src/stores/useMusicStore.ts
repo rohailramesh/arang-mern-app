@@ -119,7 +119,7 @@ export const useMusicStore = create<MusicStore>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await axiosInstance.get("/stats");
-      set({ trendingSongs: response.data });
+      set({ stats: response.data });
     } catch (error: any) {
       set({ error: error.response.data.message });
     } finally {
