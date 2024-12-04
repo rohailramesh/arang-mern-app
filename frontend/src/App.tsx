@@ -7,6 +7,7 @@ import ChatPage from "./pages/chat/ChatPage";
 import AlbumPage from "./pages/album/AlbumPage";
 import AdminPage from "./pages/admin/AdminPage";
 import NotFoundPage from "./pages/404/NotFoundPage";
+import { Toaster } from "react-hot-toast";
 export default function App() {
   return (
     <>
@@ -30,6 +31,7 @@ export default function App() {
         </Route>
         {/* Main layout route with nested routes that will share same general layout */}
       </Routes>
+      <Toaster />
     </>
   );
 }

@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { clerkMiddleware } from "@clerk/express";
 import fileUpload from "express-fileupload";
 import path from "path";
+import fs from "fs";
 import cors from "cors";
 dotenv.config();
 import { connectDB } from "./lib/db.js";
@@ -13,6 +14,7 @@ import songRouter from "./routes/song.route.js";
 import albumRouter from "./routes/album.route.js";
 import statRouter from "./routes/stat.route.js";
 import { initializeSocket } from "./lib/socket.js";
+import cron from "node-cron";
 import { createServer } from "http";
 const __dirname = path.resolve();
 const app = express();
@@ -34,10 +36,27 @@ app.use(
     tempFileDir: path.join(__dirname, "/tmp"),
     createParentPath: true, //create parent path if not exists
     limits: {
-      fileSize: 10 * 1024 * 1024, //10mb limit
+      fileSize: 1000 * 1024 * 1024, //1000mb limit
     },
   })
 );
+
+// cron jobs to delete temp files when new song or album is created
+const tempDir = path.join(process.cwd(), "tmp");
+cron.schedule("0 * * * *", () => {
+  if (fs.existsSync(tempDir)) {
+    fs.readdir(tempDir, (err, files) => {
+      if (err) {
+        console.log("error", err);
+        return;
+      }
+      for (const file of files) {
+        fs.unlink(path.join(tempDir, file), (err) => {});
+      }
+    });
+  }
+});
+
 //Eg: app.use("/api/users", userRoutes)
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
@@ -45,6 +64,12 @@ app.use("/api/admin", adminRouter);
 app.use("/api/songs", songRouter);
 app.use("/api/albums", albumRouter);
 app.use("/api/stats", statRouter);
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend", "dist", "index.html"));
+  });
+}
 app.use((err, req, res, next) => {
   res.status(500).json({
     message:
