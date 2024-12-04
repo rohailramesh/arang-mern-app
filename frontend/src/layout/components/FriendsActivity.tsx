@@ -5,7 +5,7 @@ import { HeadphonesIcon, Music, Users } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useEffect } from "react";
 const FriendsActivity = () => {
-  const { users, fetchUsers } = useChatStore();
+  const { users, fetchUsers, onlineUsers, userActivities } = useChatStore();
   const { user } = useUser();
 
   useEffect(() => {
@@ -13,7 +13,6 @@ const FriendsActivity = () => {
       fetchUsers();
     }
   }, [user, fetchUsers]);
-  const isPlaying = true;
   console.log(users);
   return (
     <>
@@ -29,8 +28,8 @@ const FriendsActivity = () => {
         <ScrollArea className="flex-1">
           <div className="p-4 space-y-4">
             {users.map((user) => {
-              // const activity = userActivities.get(user.clerkId);
-              // const isPlaying = activity && activity !== "Idle";
+              const activity = userActivities.get(user.clerkId);
+              const isPlaying = activity && activity !== "Idle";
 
               return (
                 <div
@@ -45,7 +44,7 @@ const FriendsActivity = () => {
                       </Avatar>
                       <div
                         className={`absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-zinc-900 
-												"bg-zinc-500"}
+												${onlineUsers.has(user.clerkId) ? "bg-green-500" : "bg-zinc-500"}
 												`}
                         aria-hidden="true"
                       />

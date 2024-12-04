@@ -12,9 +12,13 @@ import adminRouter from "./routes/admin.route.js";
 import songRouter from "./routes/song.route.js";
 import albumRouter from "./routes/album.route.js";
 import statRouter from "./routes/stat.route.js";
+import { initializeSocket } from "./lib/socket.js";
+import { createServer } from "http";
 const __dirname = path.resolve();
 const app = express();
 const PORT = process.env.PORT || 5001;
+const httpServer = createServer(app);
+initializeSocket(httpServer);
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -42,16 +46,14 @@ app.use("/api/songs", songRouter);
 app.use("/api/albums", albumRouter);
 app.use("/api/stats", statRouter);
 app.use((err, req, res, next) => {
-  res
-    .status(500)
-    .json({
-      message:
-        process.env.NODE_ENV === "production"
-          ? "Internal server error"
-          : err.message,
-    });
+  res.status(500).json({
+    message:
+      process.env.NODE_ENV === "production"
+        ? "Internal server error"
+        : err.message,
+  });
 });
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log("Server is running on port " + PORT);
   connectDB();
 });
