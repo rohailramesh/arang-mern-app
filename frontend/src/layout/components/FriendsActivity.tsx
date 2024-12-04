@@ -63,10 +63,10 @@ const FriendsActivity = () => {
                       {isPlaying ? (
                         <div className="mt-1">
                           <div className="mt-1 text-sm text-white font-medium truncate">
-                            Bad Blood
+                            {activity.replace("Playing ", "").split(" by ")[0]}
                           </div>
                           <div className="text-xs text-zinc-400 truncate">
-                            Taylor Swift
+                            {activity.split(" by ")[1]}
                           </div>
                         </div>
                       ) : (
