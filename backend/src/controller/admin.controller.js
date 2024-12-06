@@ -17,21 +17,25 @@ const uploadToCloudinary = async (file) => {
 
 export const createSong = async (req, res, next) => {
   try {
-    if (!req.files || !req.files.audioFile || !req.files.imageFile) {
-      return res.status(400).json({ message: "Please upload all files" });
+    const { title, artist, albumId, duration, audioUrl } = req.body;
+
+    if (!audioUrl) {
+      return res.status(400).json({ message: "Audio URL is required" });
     }
 
-    const { title, artist, albumId, duration } = req.body;
-    const audioFile = req.files.audioFile;
+    if (!req.files || !req.files.imageFile) {
+      return res.status(400).json({ message: "Please upload an image file" });
+    }
+
     const imageFile = req.files.imageFile;
 
-    const audioUrl = await uploadToCloudinary(audioFile);
+    // Upload image to Cloudinary (or your chosen storage service)
     const imageUrl = await uploadToCloudinary(imageFile);
 
     const song = new Song({
       title,
       artist,
-      audioUrl,
+      audioUrl, // Using the provided URL instead of uploading a file
       imageUrl,
       duration,
       albumId: albumId || null,
@@ -39,12 +43,13 @@ export const createSong = async (req, res, next) => {
 
     await song.save();
 
-    // if song belongs to an album, update the album's songs array
+    // If song belongs to an album, update the album's songs array
     if (albumId) {
       await Album.findByIdAndUpdate(albumId, {
         $push: { songs: song._id },
       });
     }
+
     res.status(201).json(song);
   } catch (error) {
     console.log("Error in createSong", error);

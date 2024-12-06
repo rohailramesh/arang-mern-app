@@ -61,7 +61,7 @@ const ChatPage = () => {
 
                       <div
                         className={`rounded-lg p-3 max-w-[70%]
-													${message.senderId === user?.id ? "bg-green-500" : "bg-zinc-800"}
+													${message.senderId === user?.id ? "bg-blue-500" : "bg-zinc-800"}
 												`}
                       >
                         <p className="text-sm">{message.content}</p>
@@ -89,7 +89,7 @@ export default ChatPage;
 
 const NoConversationPlaceholder = () => (
   <div className="flex flex-col items-center justify-center h-full space-y-6">
-    <img src="/spotify.png" alt="Spotify" className="size-16 animate-bounce" />
+    <img src="/arang.png" alt="Arang" className="size-16 animate-bounce" />
     <div className="text-center">
       <h3 className="text-zinc-300 text-lg font-medium mb-1">
         No conversation selected
