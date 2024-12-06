@@ -1,5 +1,5 @@
 <h1 align="center">Arang - Realtime Music Application ✨</h1>
-
+![Demo App](/frontend/public/Arang%20Demo.mov)
 About This App:
 
 - 🎸 Listen to music, play next and previous songs
@@ -10,3 +10,4 @@ About This App:
 - 👀 See what other users are listening to in real-time
 - 📊 Aggregate data for the analytics page
 - 🚀 And a lot more...
+
