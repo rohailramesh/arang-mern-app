@@ -16,6 +16,7 @@ Tech Stack:
 - Express(.js) —> Node.js web framework
 - React(.js) —> a client-side JavaScript framework
 - Node(.js) —> the premier JavaScript web server (runtime)
+- TypeScript -> JavaScript With Syntax For Types
 - Clerk -> User Authentication
 - Cloudinary -> File Storage
 - Shadcn -> component library
