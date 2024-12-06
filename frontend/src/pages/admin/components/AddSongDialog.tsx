@@ -27,6 +27,7 @@ interface NewSong {
   artist: string;
   album: string;
   duration: string;
+  audioUrl: string;
 }
 
 const AddSongDialog = () => {
@@ -39,25 +40,23 @@ const AddSongDialog = () => {
     artist: "",
     album: "",
     duration: "0",
+    audioUrl: "", // Add audioUrl here
   });
 
   const [files, setFiles] = useState<{
-    audio: File | null;
     image: File | null;
   }>({
-    audio: null,
     image: null,
   });
 
-  const audioInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async () => {
     setIsLoading(true);
 
     try {
-      if (!files.audio || !files.image) {
-        return toast.error("Please upload both audio and image files");
+      if (!newSong.audioUrl || !files.image) {
+        return toast.error("Please provide both audio URL and an image file");
       }
 
       const formData = new FormData();
@@ -65,11 +64,11 @@ const AddSongDialog = () => {
       formData.append("title", newSong.title);
       formData.append("artist", newSong.artist);
       formData.append("duration", newSong.duration);
+      formData.append("audioUrl", newSong.audioUrl);
       if (newSong.album && newSong.album !== "none") {
         formData.append("albumId", newSong.album);
       }
 
-      formData.append("audioFile", files.audio);
       formData.append("imageFile", files.image);
 
       await axiosInstance.post("/admin/songs", formData, {
@@ -83,10 +82,10 @@ const AddSongDialog = () => {
         artist: "",
         album: "",
         duration: "0",
+        audioUrl: "",
       });
 
       setFiles({
-        audio: null,
         image: null,
       });
       toast.success("Song added successfully");
@@ -101,7 +100,7 @@ const AddSongDialog = () => {
   return (
     <Dialog open={songDialogOpen} onOpenChange={setSongDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-emerald-500 hover:bg-emerald-600 text-black">
+        <Button className="bg-blue-500 hover:bg-blue-600 text-black">
           <Plus className="mr-2 h-4 w-4" />
           Add Song
         </Button>
@@ -116,16 +115,20 @@ const AddSongDialog = () => {
         </DialogHeader>
 
         <div className="space-y-4 py-4">
-          <input
-            type="file"
-            accept="audio/*"
-            ref={audioInputRef}
-            hidden
-            onChange={(e) =>
-              setFiles((prev) => ({ ...prev, audio: e.target.files![0] }))
-            }
-          />
+          {/* Audio URL Input */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Audio URL</label>
+            <Input
+              value={newSong.audioUrl}
+              onChange={(e) =>
+                setNewSong({ ...newSong, audioUrl: e.target.value })
+              }
+              className="bg-zinc-800 border-zinc-700"
+              placeholder="Enter the audio file URL"
+            />
+          </div>
 
+          {/* Image Upload */}
           <input
             type="file"
             ref={imageInputRef}
@@ -135,8 +138,6 @@ const AddSongDialog = () => {
               setFiles((prev) => ({ ...prev, image: e.target.files![0] }))
             }
           />
-
-          {/* image upload area */}
           <div
             className="flex items-center justify-center p-6 border-2 border-dashed border-zinc-700 rounded-lg cursor-pointer"
             onClick={() => imageInputRef.current?.click()}
@@ -144,9 +145,7 @@ const AddSongDialog = () => {
             <div className="text-center">
               {files.image ? (
                 <div className="space-y-2">
-                  <div className="text-sm text-emerald-500">
-                    Image selected:
-                  </div>
+                  <div className="text-sm text-blue-500">Image selected:</div>
                   <div className="text-xs text-zinc-400">
                     {files.image.name.slice(0, 20)}
                   </div>
@@ -167,23 +166,8 @@ const AddSongDialog = () => {
             </div>
           </div>
 
-          {/* Audio upload */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Audio File</label>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                onClick={() => audioInputRef.current?.click()}
-                className="w-full"
-              >
-                {files.audio
-                  ? files.audio.name.slice(0, 20)
-                  : "Choose Audio File"}
-              </Button>
-            </div>
-          </div>
-
-          {/* other fields */}
+          {/* Other Fields */}
+          {/* Title, Artist, Duration, Album... */}
           <div className="space-y-2">
             <label className="text-sm font-medium">Title</label>
             <Input
@@ -258,4 +242,5 @@ const AddSongDialog = () => {
     </Dialog>
   );
 };
+
 export default AddSongDialog;
