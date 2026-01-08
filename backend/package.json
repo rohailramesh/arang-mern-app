@@ -8,9 +8,6 @@
     "seed:songs": "node src/seeds/songs.js",
     "seed:albums": "node src/seeds/albums.js"
   },
-  "engines": {
-    "node": "20.x"
-  },
   "keywords": [],
   "type": "module",
   "author": "",
