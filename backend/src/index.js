@@ -28,7 +28,6 @@ app.use(
   })
 );
 app.use(express.json()); //use for parsing request body to json - middleware
-//Various user routes to add here which will route user to specific link
 app.use(clerkMiddleware()); //add auth to req object to check if authenticated to do specific function or not
 app.get("/api/ping", (req, res) => {
   res.status(200).json({
